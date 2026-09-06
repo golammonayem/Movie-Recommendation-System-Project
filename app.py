@@ -2,15 +2,13 @@ import streamlit as st
 import pickle
 import pandas as pd
 
-# ─── Page Config ────────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="CineMatch · AI Movie Recommendations",
+    page_title="CineMatch — Movie Recommendations",
     page_icon="🎬",
-    layout="wide",
+    layout="centered",
     initial_sidebar_state="collapsed",
 )
 
-# ─── Load Data ───────────────────────────────────────────────────────────────────
 @st.cache_data
 def load_data():
     movies_dict = pickle.load(open('movie_dict.pkl', 'rb'))
@@ -20,7 +18,6 @@ def load_data():
 
 movies, similarity = load_data()
 
-# ─── Recommendation Logic ────────────────────────────────────────────────────────
 def recommend(movie):
     matches = movies[movies['title'].str.lower() == movie.lower()]
     if matches.empty:
@@ -30,402 +27,304 @@ def recommend(movie):
     top = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
     return [movies.iloc[i[0]].title for i in top]
 
-# ─── Global CSS ──────────────────────────────────────────────────────────────────
 st.markdown("""
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 
 <style>
-/* ── Reset & Base ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; }
 
-html, body, .stApp {
-    background-color: #08080F !important;
-    color: #F1FAEE !important;
-    font-family: 'Inter', sans-serif !important;
+.stApp {
+    background: #0C0C14;
+    font-family: 'Inter', sans-serif;
 }
 
-/* Hide default Streamlit chrome */
-#MainMenu, footer, header, .stDeployButton { display: none !important; }
-.block-container {
-    padding: 0 !important;
-    max-width: 100% !important;
-}
+#MainMenu, footer, header, .stDeployButton,
+[data-testid="stToolbar"], [data-testid="stDecoration"],
 section[data-testid="stSidebar"] { display: none !important; }
 
-/* Remove Streamlit's default gaps */
-.stVerticalBlock { gap: 0 !important; }
-div[data-testid="stVerticalBlock"] > div { padding: 0 !important; }
-
-/* ── Page Wrapper ── */
-.page-wrapper {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 24px 60px;
-    background: #08080F;
+.block-container {
+    max-width: 860px !important;
+    padding: 0 20px 80px !important;
+    margin: 0 auto !important;
 }
 
-/* ── Noise texture overlay ── */
-.page-wrapper::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-}
-
-/* ── Top Nav ── */
-.nav-bar {
-    width: 100%;
-    max-width: 1100px;
+.cm-nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 28px 0 0;
-    margin-bottom: 0;
-    position: relative;
-    z-index: 1;
+    margin-bottom: 64px;
 }
-.nav-logo {
+.cm-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-family: 'Inter', sans-serif;
+    font-size: 15px;
     font-weight: 600;
-    font-size: 14px;
-    letter-spacing: 0.12em;
-    color: #A8DADC;
-    text-transform: uppercase;
+    color: #FFFFFF;
+    letter-spacing: -0.01em;
 }
-.nav-tag {
-    font-size: 12px;
-    color: #4a4a5a;
-    font-weight: 400;
-    letter-spacing: 0.05em;
+.cm-logo-dot {
+    width: 8px;
+    height: 8px;
+    background: #E5484D;
+    border-radius: 50%;
+}
+.cm-badge {
+    font-size: 11px;
+    font-weight: 500;
+    color: #E5484D;
+    background: rgba(229, 72, 77, 0.12);
+    border: 1px solid rgba(229, 72, 77, 0.22);
+    border-radius: 20px;
+    padding: 3px 10px;
+    letter-spacing: 0.02em;
 }
 
-/* ── Hero ── */
-.hero {
-    width: 100%;
-    max-width: 1100px;
+.cm-hero {
     text-align: center;
-    padding: 72px 0 52px;
-    position: relative;
-    z-index: 1;
+    margin-bottom: 52px;
 }
-.hero-eyebrow {
+.cm-hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin: 0 0 16px;
+}
+.cm-hero-title em {
+    color: #E5484D;
+    font-style: normal;
+}
+.cm-hero-sub {
+    font-size: 16px;
+    color: #6B6B80;
+    line-height: 1.6;
+    max-width: 460px;
+    margin: 0 auto;
+    font-weight: 400;
+}
+
+.cm-search-card {
+    background: #13131F;
+    border: 1px solid #1E1E2E;
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+    margin-bottom: 48px;
+}
+.cm-search-label {
     font-size: 12px;
     font-weight: 500;
-    letter-spacing: 0.18em;
-    color: #E63946;
-    margin-bottom: 20px;
+    color: #4A4A5E;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-}
-.hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(48px, 7vw, 86px);
-    font-weight: 900;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    color: #F1FAEE;
-    margin-bottom: 22px;
-}
-.hero-title span {
-    color: #E63946;
-}
-.hero-sub {
-    font-size: 17px;
-    line-height: 1.65;
-    color: #7a7a9a;
-    font-weight: 300;
-    max-width: 520px;
-    margin: 0 auto;
-}
-
-/* ── Divider ── */
-.divider {
-    width: 100%;
-    max-width: 1100px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #1e1e2e 30%, #1e1e2e 70%, transparent);
-    margin-bottom: 52px;
-    position: relative;
-    z-index: 1;
-}
-
-/* ── Search Section ── */
-.search-section {
-    width: 100%;
-    max-width: 680px;
-    position: relative;
-    z-index: 1;
-    margin-bottom: 56px;
-}
-.search-label {
-    font-size: 13px;
-    font-weight: 500;
-    color: #7a7a9a;
     margin-bottom: 10px;
-    letter-spacing: 0.04em;
 }
 
-/* Override Streamlit selectbox */
-div[data-testid="stSelectbox"] {
-    margin-bottom: 0 !important;
-}
-div[data-testid="stSelectbox"] > label {
-    display: none !important;
-}
-div[data-testid="stSelectbox"] > div > div {
-    background: #12121F !important;
-    border: 1px solid #2a2a3e !important;
+div[data-testid="stSelectbox"] label { display: none !important; }
+
+div[data-testid="stSelectbox"] > div > div[data-baseweb="select"] > div {
+    background: #0C0C14 !important;
+    border: 1px solid #252535 !important;
     border-radius: 10px !important;
-    color: #F1FAEE !important;
+    color: #E8E8F0 !important;
     font-family: 'Inter', sans-serif !important;
     font-size: 15px !important;
-    padding: 14px 18px !important;
-    transition: border-color 0.2s ease !important;
-    box-shadow: 0 0 0 0 transparent !important;
+    min-height: 48px !important;
+    padding: 0 16px !important;
+    transition: border-color 0.18s ease !important;
 }
-div[data-testid="stSelectbox"] > div > div:focus-within,
-div[data-testid="stSelectbox"] > div > div:hover {
-    border-color: #E63946 !important;
-    box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.12) !important;
+div[data-testid="stSelectbox"] > div > div[data-baseweb="select"] > div:hover {
+    border-color: #E5484D !important;
 }
-div[data-testid="stSelectbox"] svg {
-    color: #7a7a9a !important;
-    fill: #7a7a9a !important;
-}
+div[data-baseweb="select"] svg { fill: #4A4A5E !important; }
 
-/* Dropdown list */
-div[data-baseweb="popover"] {
-    background: #12121F !important;
-    border: 1px solid #2a2a3e !important;
+div[data-baseweb="popover"] ul {
+    background: #13131F !important;
+    border: 1px solid #252535 !important;
     border-radius: 10px !important;
-    overflow: hidden !important;
+    padding: 6px !important;
 }
 div[data-baseweb="popover"] li {
-    background: #12121F !important;
-    color: #d0d0e0 !important;
+    background: transparent !important;
+    color: #B0B0C4 !important;
     font-family: 'Inter', sans-serif !important;
     font-size: 14px !important;
+    border-radius: 6px !important;
+    padding: 8px 12px !important;
 }
-div[data-baseweb="popover"] li:hover,
-div[data-baseweb="popover"] li[aria-selected="true"] {
-    background: #1e1e32 !important;
-    color: #F1FAEE !important;
+div[data-baseweb="popover"] li:hover {
+    background: #1E1E30 !important;
+    color: #FFFFFF !important;
 }
 
-/* ── Recommend Button ── */
 div[data-testid="stButton"] > button {
-    background: #E63946 !important;
-    color: #ffffff !important;
+    background: #E5484D !important;
+    color: #FFFFFF !important;
     border: none !important;
     border-radius: 10px !important;
     font-family: 'Inter', sans-serif !important;
     font-size: 14px !important;
     font-weight: 600 !important;
-    letter-spacing: 0.04em !important;
-    padding: 14px 28px !important;
+    letter-spacing: 0.02em !important;
+    height: 48px !important;
     width: 100% !important;
-    margin-top: 14px !important;
+    margin-top: 12px !important;
     cursor: pointer !important;
-    transition: background 0.2s ease, transform 0.15s ease !important;
-    box-shadow: 0 4px 20px rgba(230, 57, 70, 0.25) !important;
+    transition: opacity 0.18s ease, transform 0.12s ease !important;
 }
 div[data-testid="stButton"] > button:hover {
-    background: #c0282f !important;
+    opacity: 0.88 !important;
     transform: translateY(-1px) !important;
-    box-shadow: 0 8px 28px rgba(230, 57, 70, 0.35) !important;
 }
 div[data-testid="stButton"] > button:active {
+    opacity: 1 !important;
     transform: translateY(0) !important;
 }
 
-/* ── Results Section ── */
-.results-header {
-    width: 100%;
-    max-width: 1100px;
-    text-align: center;
-    margin-bottom: 32px;
-    position: relative;
-    z-index: 1;
-}
-.results-label {
-    font-size: 11px;
+.cm-results-heading {
+    font-size: 13px;
     font-weight: 500;
-    letter-spacing: 0.16em;
-    color: #4a4a5a;
+    color: #4A4A5E;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
 }
-.results-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: #F1FAEE;
+.cm-results-heading span {
+    color: #E5484D;
+    text-transform: none;
+    letter-spacing: 0;
+    font-style: italic;
 }
-.results-title span { color: #E63946; }
 
-/* ── Movie Cards ── */
-.results-grid {
-    width: 100%;
-    max-width: 1100px;
+.cm-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 16px;
-    position: relative;
-    z-index: 1;
+    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    gap: 12px;
+    margin-bottom: 48px;
 }
-.movie-card {
-    background: #12121F;
-    border: 1px solid #1e1e2e;
+.cm-card {
+    background: #13131F;
+    border: 1px solid #1E1E2E;
     border-radius: 12px;
-    padding: 28px 20px 24px;
+    padding: 20px 16px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-height: 160px;
-    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-    cursor: default;
-    position: relative;
-    overflow: hidden;
+    gap: 10px;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+    min-height: 140px;
 }
-.movie-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #E63946, #A8DADC);
-    opacity: 0;
-    transition: opacity 0.25s ease;
+.cm-card:hover {
+    border-color: #2E2E48;
+    transform: translateY(-3px);
 }
-.movie-card:hover {
-    border-color: #2e2e48;
-    transform: translateY(-4px);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
-}
-.movie-card:hover::before { opacity: 1; }
-
-.card-rank {
+.cm-card-num {
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.12em;
-    color: #E63946;
-    text-transform: uppercase;
-    margin-bottom: 12px;
+    color: #E5484D;
+    letter-spacing: 0.1em;
 }
-.card-title {
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
+.cm-card-title {
+    font-size: 14px;
     font-weight: 500;
-    color: #F1FAEE;
-    line-height: 1.4;
+    color: #E8E8F0;
+    line-height: 1.45;
+    flex: 1;
 }
 
-/* ── Footer ── */
-.footer {
-    width: 100%;
-    max-width: 1100px;
-    border-top: 1px solid #1a1a2a;
-    padding-top: 28px;
-    margin-top: 72px;
+.cm-divider {
+    height: 1px;
+    background: #1A1A28;
+    margin: 0 0 28px;
+}
+.cm-footer {
     text-align: center;
-    position: relative;
-    z-index: 1;
-}
-.footer-text {
     font-size: 12px;
-    color: #3a3a4e;
-    font-weight: 400;
-    letter-spacing: 0.04em;
+    color: #2E2E44;
+    padding-bottom: 16px;
 }
 
-/* ── Spinner override ── */
-div[data-testid="stSpinner"] {
-    color: #E63946 !important;
-}
+div[data-testid="stSpinner"] p { color: #6B6B80 !important; }
 
-/* ── Warning ── */
 div[data-testid="stAlert"] {
-    background: #1a0f10 !important;
-    border: 1px solid #3e1a1d !important;
+    background: rgba(229, 72, 77, 0.08) !important;
+    border: 1px solid rgba(229, 72, 77, 0.2) !important;
     border-radius: 10px !important;
-    color: #e07080 !important;
+}
+div[data-testid="stAlert"] p { color: #F0A0A2 !important; }
+
+@media (max-width: 600px) {
+    .block-container { padding: 0 16px 60px !important; }
+    .cm-nav { margin-bottom: 40px; padding-top: 20px; }
+    .cm-hero { margin-bottom: 36px; }
+    .cm-search-card { padding: 20px; }
+    .cm-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .cm-card { min-height: 110px; padding: 16px 14px; }
+}
+@media (max-width: 380px) {
+    .cm-grid { grid-template-columns: 1fr; }
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ─── Layout ─────────────────────────────────────────────────────────────────────
-st.markdown('<div class="page-wrapper">', unsafe_allow_html=True)
-
-# Nav
 st.markdown("""
-<div class="nav-bar">
-    <span class="nav-logo">🎬 CineMatch</span>
-    <span class="nav-tag">Content-Based Filtering · ML Powered</span>
+<div class="cm-nav">
+    <div class="cm-logo">
+        <div class="cm-logo-dot"></div>
+        CineMatch
+    </div>
+    <span class="cm-badge">ML Powered</span>
 </div>
 """, unsafe_allow_html=True)
 
-# Hero
 st.markdown("""
-<div class="hero">
-    <p class="hero-eyebrow">AI-Powered Discovery</p>
-    <h1 class="hero-title">Find Your Next<br><span>Favorite Film</span></h1>
-    <p class="hero-sub">Tell us a movie you love. Our model analyzes patterns across thousands of films to surface the ones most likely to resonate with you.</p>
+<div class="cm-hero">
+    <h1 class="cm-hero-title">Find your next<br><em>favorite film</em></h1>
+    <p class="cm-hero-sub">Pick a movie you love. Our content-based model finds the five most similar films for you.</p>
 </div>
-<div class="divider"></div>
 """, unsafe_allow_html=True)
 
-# Search
-st.markdown('<div class="search-section">', unsafe_allow_html=True)
-st.markdown('<p class="search-label">Start with a movie you enjoy</p>', unsafe_allow_html=True)
+st.markdown('<div class="cm-search-card">', unsafe_allow_html=True)
+st.markdown('<p class="cm-search-label">Choose a movie</p>', unsafe_allow_html=True)
 
-_, center, _ = st.columns([1, 10, 1])
-with center:
-    selected_movie = st.selectbox(
-        "Movie",
-        movies['title'].values,
-        label_visibility="collapsed",
-    )
-    pressed = st.button("Find Similar Movies →", use_container_width=True)
+selected_movie = st.selectbox(
+    "Movie",
+    movies['title'].values,
+    label_visibility="collapsed",
+)
+pressed = st.button("Find similar movies", use_container_width=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Results
 if pressed:
-    with st.spinner("Analyzing..."):
+    with st.spinner("Finding recommendations..."):
         recs = recommend(selected_movie)
 
     if recs:
-        st.markdown("""
-        <div class="results-header">
-            <p class="results-label">Recommendations for you</p>
-            <h2 class="results-title">Because you liked <span>""" + selected_movie + """</span></h2>
-        </div>
-        """, unsafe_allow_html=True)
-
-        ranks = ["01", "02", "03", "04", "05"]
-        cards_html = '<div class="results-grid">'
+        safe_title = selected_movie.replace("<", "&lt;").replace(">", "&gt;")
+        st.markdown(
+            f'<p class="cm-results-heading">Because you liked <span>{safe_title}</span></p>',
+            unsafe_allow_html=True
+        )
+        nums = ["01", "02", "03", "04", "05"]
+        cards_html = '<div class="cm-grid">'
         for i, title in enumerate(recs):
+            safe = title.replace("<", "&lt;").replace(">", "&gt;")
             cards_html += f"""
-            <div class="movie-card">
-                <p class="card-rank">Pick {ranks[i]}</p>
-                <p class="card-title">{title}</p>
+            <div class="cm-card">
+                <span class="cm-card-num">{nums[i]}</span>
+                <span class="cm-card-title">{safe}</span>
             </div>"""
-        cards_html += '</div>'
+        cards_html += "</div>"
         st.markdown(cards_html, unsafe_allow_html=True)
     else:
-        st.warning("Movie not found in the dataset. Try a different title.")
+        st.warning("Movie not found. Try a different title.")
 
-# Footer
-st.markdown("""
-<div class="footer">
-    <p class="footer-text">CineMatch · Built with Streamlit & Scikit-Learn · Machine Learning Portfolio Project</p>
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('<div class="cm-divider"></div>', unsafe_allow_html=True)
+st.markdown(
+    '<p class="cm-footer">CineMatch · Content-Based Filtering · Built with Streamlit & Scikit-Learn</p>',
+    unsafe_allow_html=True
+)
