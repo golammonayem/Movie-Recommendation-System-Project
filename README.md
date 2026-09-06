@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Movie-Recommendation-System-Project
 =======
 # 🎬 Movie Recommendation System
@@ -6,7 +5,7 @@
 An end-to-end Machine Learning web application that suggests similar movies based on user preferences using content-based filtering and Natural Language Processing (NLP).
 
 ## 🚀 Live Demo
-[Click Here to View Live App](#) *(Deploy করার পর এখানে তোমার Streamlit-এর লাইভ লিংকটি বসিয়ে দিও)*
+[Click Here to View Live App](#)
 
 ---
 
@@ -36,4 +35,3 @@ An end-to-end Machine Learning web application that suggests similar movies base
 ├── movie_dict.pkl        # Serialized Pandas DataFrame containing movie metadata
 ├── similarity.pkl        # Precomputed Cosine Similarity matrix
 └── requirements.txt      # Required Python packages for deployment
->>>>>>> afc0f6a (Adding md)
