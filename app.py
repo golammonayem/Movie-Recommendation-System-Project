@@ -5,24 +5,26 @@ import pandas as pd
 # Page Configuration
 st.set_page_config(page_title="CineMatch - Movie Recommendation System", page_icon="🎬", layout="wide")
 
-# Custom CSS for Landing Page Styling
+# Custom CSS for Red-Red Gradient Vibe and Glow Hover Effect
 st.markdown("""
     <style>
     .main-title {
         font-size: 3rem;
-        color: #FF4B4B;
+        background: linear-gradient(135deg, #FF1E1E 0%, #800000 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         text-align: center;
         font-weight: 800;
         margin-bottom: 0px;
     }
     .sub-title {
         font-size: 1.2rem;
-        color: #C0C0C0;
+        color: #B0B0B0;
         text-align: center;
         margin-bottom: 30px;
     }
     .movie-card {
-        background-color: #1E1E1E;
+        background: linear-gradient(135deg, #1a0505 0%, #2d0a0a 100%);
         padding: 20px;
         border-radius: 12px;
         text-align: center;
@@ -30,8 +32,14 @@ st.markdown("""
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        border: 1px solid #333333;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+        border: 1px solid #4a0f0f;
+        transition: all 0.3s ease-in-out;
+    }
+    .movie-card:hover {
+        transform: translateY(-5px);
+        border-color: #ff1e1e;
+        box-shadow: 0 0 25px rgba(255, 30, 30, 0.8), inset 0 0 10px rgba(255, 30, 30, 0.4);
     }
     .movie-title {
         color: #FFFFFF;
@@ -63,8 +71,8 @@ movies = pd.DataFrame(movies_dict)
 similarity = pickle.load(open('similarity.pkl', 'rb'))
 
 # Landing Page Header
-st.markdown('<p class="main-title">🎬 CineMatch AI</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-title">Discover your next favorite movie instantly using Machine Learning & Content-Based Filtering</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-title">CineMatch AI</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-title">Discover your next favorite movie instantly using Machine Learning and Content-Based Filtering</p>', unsafe_allow_html=True)
 
 st.write("---")
 
@@ -76,19 +84,17 @@ with col2:
         movies['title'].values
     )
     
-    # Spacing and Button
     st.write("")
-    pressed = st.button('✨ Get Recommendations', use_container_width=True)
+    pressed = st.button('Get Recommendations', use_container_width=True)
 
 # Recommendation Results Section
 if pressed:
-    with st.spinner('Analyzing movie patterns and finding best matches...'):
+    with st.spinner('Analyzing movie patterns...'):
         recommendations = recommend(selected_movie_name)
         
     if recommendations:
-        st.markdown("<br><h3 style='text-align: center; color: #FFFFFF;'>🌟 Top 5 Recommended Movies For You</h3><br>", unsafe_allow_html=True)
+        st.markdown("<br><h3 style='text-align: center; color: #FFFFFF;'>Top Recommended Movies For You</h3><br>", unsafe_allow_html=True)
         
-        # Displaying recommendations in a grid of 5 columns
         cols = st.columns(5)
         for idx, col in enumerate(cols):
             if idx < len(recommendations):
@@ -104,4 +110,4 @@ if pressed:
 # Footer
 st.write("<br><br>", unsafe_allow_html=True)
 st.write("---")
-st.markdown("<p style='text-align: center; color: #888888; font-size: 13px;'>Developed with ❤️ as a Machine Learning Portfolio Project | Powered by Streamlit & Scikit-Learn</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #888888; font-size: 13px;'>Developed as a Machine Learning Portfolio Project | Powered by Streamlit and Scikit-Learn</p>", unsafe_allow_html=True)
