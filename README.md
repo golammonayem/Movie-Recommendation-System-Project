@@ -5,7 +5,7 @@
 An end-to-end Machine Learning web application that suggests similar movies based on user preferences using content-based filtering and Natural Language Processing (NLP).
 
 ## 🚀 Live Demo
-[Click Here to View Live App](#)
+[https://movie-recommendation-system-project1.streamlit.app/](#)
 
 ---
 
