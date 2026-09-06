@@ -5,34 +5,65 @@ import pandas as pd
 # Page Configuration
 st.set_page_config(page_title="CineMatch - Movie Recommendation System", layout="wide")
 
-# Custom CSS for Full Background Red Gradient and Green Suggestions Glow Effect
-st.markdown("""
+# Initialize session state for theme (Default: Light/White mode)
+if 'theme' not in st.session_state:
+    st.session_state.theme = 'Light'
+
+# Top Bar Theme Toggle Button
+col_space1, col_space2, col_btn = [st.columns([6, 1, 1])[i] for i in range(3)]
+with col_btn:
+    if st.session_state.theme == 'Light':
+        if st.button("🌙 Dark Mode", use_container_width=True):
+            st.session_state.theme = 'Dark'
+            st.rerun()
+    else:
+        if st.button("☀️ Light Mode", use_container_width=True):
+            st.session_state.theme = 'Light'
+            st.rerun()
+
+# Dynamic Styling based on Theme Selection
+if st.session_state.theme == 'Light':
+    bg_color = "#FFFFFF"
+    text_color = "#1A1A1A"
+    sub_text_color = "#555555"
+    card_bg = "#F8F9FA"
+    card_border = "#E0E0E0"
+    card_title_color = "#008736"
+    title_gradient = "linear-gradient(135deg, #E60000 0%, #800000 100%)"
+    card_hover_border = "#00A844"
+else:
+    bg_color = "#0d0101"
+    text_color = "#FFFFFF"
+    sub_text_color = "#C0C0C0"
+    card_bg = "linear-gradient(135deg, #031a0b 0%, #072e13 100%)"
+    card_border = "#0f4a21"
+    card_title_color = "#00FF66"
+    title_gradient = "linear-gradient(135deg, #FF3B3B 0%, #FF8080 100%)"
+    card_hover_border = "#00FF66"
+
+st.markdown(f"""
     <style>
-    /* Full Streamlit App Background Gradient */
-    .stApp {
-        background: linear-gradient(135deg, #240505 0%, #0d0101 100%);
-        color: #FFFFFF;
-    }
-    
-    .main-title {
+    .stApp {{
+        background-color: {bg_color};
+        color: {text_color};
+    }}
+    .main-title {{
         font-size: 3rem;
-        background: linear-gradient(135deg, #FF3B3B 0%, #FF8080 100%);
+        background: {title_gradient};
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         text-align: center;
         font-weight: 800;
         margin-bottom: 0px;
-    }
-    .sub-title {
+    }}
+    .sub-title {{
         font-size: 1.2rem;
-        color: #C0C0C0;
+        color: {sub_text_color};
         text-align: center;
         margin-bottom: 30px;
-    }
-    
-    /* Green Glow Movie Cards for Suggestions */
-    .movie-card {
-        background: linear-gradient(135deg, #031a0b 0%, #072e13 100%);
+    }}
+    .movie-card {{
+        background: {card_bg};
         padding: 20px;
         border-radius: 12px;
         text-align: center;
@@ -40,21 +71,21 @@ st.markdown("""
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-        border: 1px solid #0f4a21;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border: 1px solid {card_border};
         transition: all 0.3s ease-in-out;
-    }
-    .movie-card:hover {
+    }}
+    .movie-card:hover {{
         transform: translateY(-5px);
-        border-color: #00FF66;
-        box-shadow: 0 0 25px rgba(0, 255, 102, 0.7), inset 0 0 10px rgba(0, 255, 102, 0.3);
-    }
-    .movie-title {
-        color: #00FF66;
+        border-color: {card_hover_border};
+        box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);
+    }}
+    .movie-title {{
+        color: {card_title_color};
         font-size: 16px;
         font-weight: 600;
         margin: 0;
-    }
+    }}
     </style>
 """, unsafe_allow_html=True)
 
@@ -101,7 +132,7 @@ if pressed:
         recommendations = recommend(selected_movie_name)
         
     if recommendations:
-        st.markdown("<br><h3 style='text-align: center; color: #FFFFFF;'>Top Recommended Movies For You</h3><br>", unsafe_allow_html=True)
+        st.markdown(f"<br><h3 style='text-align: center; color: {text_color};'>Top Recommended Movies For You</h3><br>", unsafe_allow_html=True)
         
         cols = st.columns(5)
         for idx, col in enumerate(cols):
@@ -118,4 +149,4 @@ if pressed:
 # Footer
 st.write("<br><br>", unsafe_allow_html=True)
 st.write("---")
-st.markdown("<p style='text-align: center; color: #888888; font-size: 13px;'>Developed as a Machine Learning Portfolio Project | Powered by Streamlit and Scikit-Learn</p>", unsafe_allow_html=True)
+st.markdown(f"<p style='text-align: center; color: {sub_text_color}; font-size: 13px;'>Developed as a Machine Learning Portfolio Project | Powered by Streamlit and Scikit-Learn</p>", unsafe_allow_html=True)
