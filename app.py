@@ -3,14 +3,20 @@ import pickle
 import pandas as pd
 
 # Page Configuration
-st.set_page_config(page_title="CineMatch - Movie Recommendation System", page_icon="🎬", layout="wide")
+st.set_page_config(page_title="CineMatch - Movie Recommendation System", layout="wide")
 
-# Custom CSS for Red-Red Gradient Vibe and Glow Hover Effect
+# Custom CSS for Full Background Red Gradient and Green Suggestions Glow Effect
 st.markdown("""
     <style>
+    /* Full Streamlit App Background Gradient */
+    .stApp {
+        background: linear-gradient(135deg, #240505 0%, #0d0101 100%);
+        color: #FFFFFF;
+    }
+    
     .main-title {
         font-size: 3rem;
-        background: linear-gradient(135deg, #FF1E1E 0%, #800000 100%);
+        background: linear-gradient(135deg, #FF3B3B 0%, #FF8080 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         text-align: center;
@@ -19,12 +25,14 @@ st.markdown("""
     }
     .sub-title {
         font-size: 1.2rem;
-        color: #B0B0B0;
+        color: #C0C0C0;
         text-align: center;
         margin-bottom: 30px;
     }
+    
+    /* Green Glow Movie Cards for Suggestions */
     .movie-card {
-        background: linear-gradient(135deg, #1a0505 0%, #2d0a0a 100%);
+        background: linear-gradient(135deg, #031a0b 0%, #072e13 100%);
         padding: 20px;
         border-radius: 12px;
         text-align: center;
@@ -33,16 +41,16 @@ st.markdown("""
         align-items: center;
         justify-content: center;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-        border: 1px solid #4a0f0f;
+        border: 1px solid #0f4a21;
         transition: all 0.3s ease-in-out;
     }
     .movie-card:hover {
         transform: translateY(-5px);
-        border-color: #ff1e1e;
-        box-shadow: 0 0 25px rgba(255, 30, 30, 0.8), inset 0 0 10px rgba(255, 30, 30, 0.4);
+        border-color: #00FF66;
+        box-shadow: 0 0 25px rgba(0, 255, 102, 0.7), inset 0 0 10px rgba(0, 255, 102, 0.3);
     }
     .movie-title {
-        color: #FFFFFF;
+        color: #00FF66;
         font-size: 16px;
         font-weight: 600;
         margin: 0;
