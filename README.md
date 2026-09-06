@@ -7,7 +7,8 @@ An end-to-end Machine Learning web application that suggests similar movies base
 [https://movie-recommendation-system-project1.streamlit.app/](#)
 
 ---
-
+Dataset link: [https://movie-recommendation-system-project1.streamlit.app/](#)
+---
 ## 🛠️ Tech Stack & Libraries
 * **Language:** Python
 * **Machine Learning & NLP:** Scikit-learn, Pandas, NumPy, NLTK/AST
