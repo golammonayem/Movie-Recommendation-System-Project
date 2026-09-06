@@ -134,7 +134,8 @@ st.markdown(f"""
 </div>""", unsafe_allow_html=True)
 
 # ── Search ───────────────────────────────────────────────────────────────────
-st.markdown('<div class="cm-card"><div class="cm-lbl">Choose a movie</div>', unsafe_allow_html=True)
+#st.markdown('<div class="cm-card"><div class="cm-lbl">Choose a movie</div>', unsafe_allow_html=True)
+st.markdown('<div class=""><div class="">Choose a movie</div>', unsafe_allow_html=True)
 selected_movie = st.selectbox("Movie", movies['title'].values, label_visibility="collapsed")
 pressed = st.button("Find similar movies", use_container_width=True)
 st.markdown('</div>', unsafe_allow_html=True)
