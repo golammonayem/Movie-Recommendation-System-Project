@@ -1,5 +1,4 @@
 # Movie-Recommendation-System-Project
-=======
 # 🎬 Movie Recommendation System
 
 An end-to-end Machine Learning web application that suggests similar movies based on user preferences using content-based filtering and Natural Language Processing (NLP).
